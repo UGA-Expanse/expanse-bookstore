@@ -1,8 +1,18 @@
+buildscript {
+	dependencies {
+		// https://mvnrepository.com/artifact/org.flywaydb/flyway-gradle-plugin
+		classpath 'org.flywaydb:flyway-gradle-plugin:8.5.7'
+	}
+}
+
+
 plugins {
 	id 'org.springframework.boot' version '2.6.6'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
+
+apply plugin: 'org.flywaydb.flyway'
 
 group = 'rocks.j5.uga.expanse'
 version = '0.0.1-SNAPSHOT'
@@ -25,6 +35,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+// Flyway autoconfiguration
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.springframework.session:spring-session-jdbc'
 	compileOnly 'org.projectlombok:lombok'
@@ -37,3 +48,11 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+flyway {
+	url = 'jdbc:mysql://localhost:3306/uga-expanse-db?serverTimezone=UTC'
+	user = 'root'
+	password = 'h0m3r+mysql'
+}
+
+

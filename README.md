@@ -22,7 +22,7 @@ To install this application, run the following commands:
 
 ```bash
 git clone https://github.com/devRobots/spring-boot-ecommerce.git spring-boot-ecommerce
-cd spring-boot-ecommerce
+cd uga-expanse-bookstore
 ```
 
 This will get a copy of the project installed locally. To configure all of its dependencies and start each app, follow the instructions below.
@@ -44,13 +44,13 @@ mysql -u {username} -p
 This command will ask for your MySQL password. Once inside the MySQL monitor you can create the database with the following command.
 
 ```SQL
-CREATE DATABASE ecommerce;
+CREATE DATABASE `uga-expanse-db` ;
 ```
 
 Now you can run the server which generates the database tables. To run the server, run:
 
 ```bash
-./mvnw spring-boot:run
+./gradlew spring-boot:run
 ```
 
 ### Create admin user
@@ -58,17 +58,17 @@ Now you can run the server which generates the database tables. To run the serve
 Before continuing you must create the user `admin`, in order to perform administrator operations in the application. For this you must create a user on the MySQL monitor with the following command.
 
 ```SQL
-USE ecommerce;
+USE expansedb;
 INSERT INTO user (username, email, is_admin, password) values ('{admin.username}', '{admin.email}', true, '{admin.password}');
 ```
 
 ### Run Frontend Client
 
-Now you can run the frondent client to use the web application. To run the client, run:
+Now you can run the frontend client to use the web application. To run the client, run:
 
 ```bash
-cd ecommerce-frontend
-npm start
+cd expanse-frontend
+yarn start
 ```
 
 ## Links
