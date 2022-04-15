@@ -58,7 +58,7 @@ Now you can run the server which generates the database tables. To run the serve
 Before continuing you must create the user `admin`, in order to perform administrator operations in the application. For this you must create a user on the MySQL monitor with the following command.
 
 ```SQL
-USE expansedb;
+USE uga-expanse-db;
 INSERT INTO user (username, email, is_admin, password) values ('{admin.username}', '{admin.email}', true, '{admin.password}');
 ```
 
