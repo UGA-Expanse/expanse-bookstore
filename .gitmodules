@@ -1,0 +1,3 @@
+[submodule "expanse-frontend"]
+	path = expanse-frontend
+	url = git@github.com:UGA-Expanse/bookstore-client.git
