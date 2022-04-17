@@ -1,6 +1,7 @@
 package rocks.j5.uga.expanse.controller;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin("*")

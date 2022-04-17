@@ -13,7 +13,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJdbcHttpSession
 public class JDBCDataSourceConfig extends AbstractHttpSessionApplicationInitializer {
 
     @Value("${spring.datasource.url}")

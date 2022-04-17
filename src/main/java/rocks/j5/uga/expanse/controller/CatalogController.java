@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import rocks.j5.uga.expanse.domain.EncounteredError;
 import rocks.j5.uga.expanse.domain.HttpResponseWrapper;
+import rocks.j5.uga.expanse.model.Book;
 import rocks.j5.uga.expanse.model.BookOriginal;
 import rocks.j5.uga.expanse.model.User;
 import rocks.j5.uga.expanse.service.CatalogService;
@@ -21,13 +22,15 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/catalog", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/book", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CatalogController {
 
     private final CatalogService catalogService;
     private final UserService userService;
 
-    public CatalogController(CatalogService catalogService, UserService userService) {
+    public CatalogController(CatalogService catalogService,
+                             UserService userService) {
+
         this.catalogService = catalogService;
         this.userService = userService;
     }
@@ -39,7 +42,7 @@ public class CatalogController {
      * @return all books
      */
     @GetMapping(value = "/all")
-    public List<BookOriginal> getAll() {
+    public List<Book> getAll() {
         return catalogService.findAll();
     }
 
