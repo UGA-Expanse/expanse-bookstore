@@ -1,7 +1,3 @@
-CREATE DATABASE expanse_books;
-
-USE expanse_books;
-
 create table if not exists USER
 (
     `username` varchar(19) not null unique,

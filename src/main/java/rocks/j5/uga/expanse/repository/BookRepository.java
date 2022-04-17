@@ -13,11 +13,6 @@ import java.util.Optional;
  */
 public interface BookRepository extends JpaRepository<User, String> {
 
-    @Override
-    Optional<User> findById(String username);
-
-    Optional<User> findAllById();
-
 
 
 }

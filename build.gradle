@@ -1,7 +1,7 @@
 buildscript {
 	dependencies {
 		// https://mvnrepository.com/artifact/org.flywaydb/flyway-gradle-plugin
-		classpath 'org.flywaydb:flyway-gradle-plugin:8.5.7'
+		classpath 'org.flywaydb:flyway-gradle-plugin:8.2.0'
 	}
 }
 
@@ -51,7 +51,7 @@ tasks.named('test') {
 }
 
 flyway {
-	url = 'jdbc:mysql://localhost:3306/ugaexpanse?serverTimezone=UTC'
+	url = 'jdbc:mysql://localhost:3306/expanse_books'
 	user = 'root'
 	password = 'h0m3r+mysql'
 }

@@ -10,9 +10,7 @@ import javax.persistence.*;
  *
  * @version 1.0
  */
-@Entity
 @Data
-@Table(name = "book")
 public class BookOriginal {
 
     /** The id. */

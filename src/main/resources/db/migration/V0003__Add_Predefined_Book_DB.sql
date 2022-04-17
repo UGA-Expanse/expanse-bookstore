@@ -1,5 +1,3 @@
-USE expanse_books;
-
 CREATE TABLE author (
                         author_id INT,
                         author_name VARCHAR(400),
