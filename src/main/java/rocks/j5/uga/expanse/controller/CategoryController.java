@@ -1,9 +1,13 @@
 package rocks.j5.uga.expanse.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import rocks.j5.uga.expanse.model.Book;
 import rocks.j5.uga.expanse.model.Category;
-import rocks.j5.uga.expanse.repository.CategoryRepository;
+import rocks.j5.uga.expanse.service.CatalogService;
+import rocks.j5.uga.expanse.service.CategoryService;
+import rocks.j5.uga.expanse.service.UserService;
 
 import java.util.List;
 
@@ -12,16 +16,21 @@ import java.util.List;
  *
  * @version 1.0
  */
+
+@Slf4j
 @RestController
-@RequestMapping("/api/categories")
-@CrossOrigin("*")
+@RequestMapping(value = "/api/category", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CategoryController {
 
-	/** The category repository. */
-	private final CategoryRepository categoryRepository;
+	private final CatalogService catalogService;
+	private final CategoryService categoryService;
+	private final UserService userService;
 
-	public CategoryController(CategoryRepository categoryRepository) {
-		this.categoryRepository = categoryRepository;
+	public CategoryController(CatalogService catalogService, CategoryService categoryService,
+							  UserService userService) {
+		this.catalogService = catalogService;
+		this.categoryService = categoryService;
+		this.userService = userService;
 	}
 
 	/**
@@ -29,18 +38,9 @@ public class CategoryController {
 	 *
 	 * @return all categories
 	 */
-	@GetMapping(value = "/all")
-	public List<Category> getAll() {
-		return categoryRepository.findAll();
-	}
-	/**
-	 * Gets category.
-	 *
-	 * @return category if exists
-	 */
-	@GetMapping(value = "/get")
-	public Category get(@RequestParam("id") int id) {
-		return categoryRepository.findById(id).get();
+	@GetMapping(value = "/{category}/all")
+	public Category getAllBooksByCategory(@PathVariable String category) {
+		return categoryService.findAllBooksByCategory(category);
 	}
 
 	/**
@@ -51,9 +51,10 @@ public class CategoryController {
 	 */
 	@PostMapping(value = "/add")
 	public List<Category> persist(@RequestBody final Category category) {
-		categoryRepository.save(category);
-		return categoryRepository.findAll();
+		categoryService.save(category);
+		return categoryService.findAll();
 	}
+
 	/**
 	 * Delete category.
 	 *
@@ -62,9 +63,10 @@ public class CategoryController {
 	 */
 	@DeleteMapping(value = "/delete")
 	public List<Category> delete(@PathVariable int id) {
-		categoryRepository.deleteById(id);
-		return categoryRepository.findAll();
+		categoryService.deleteById(id);
+		return categoryService.findAll();
 	}
+
 	/**
 	 * Put category.
 	 *
@@ -74,11 +76,11 @@ public class CategoryController {
 	 */
 	@PutMapping(value = "/put/{id}")
 	public List<Category> put(@PathVariable int id, @RequestBody Category category) {
-		if (categoryRepository.existsById(id)) {
-			categoryRepository.deleteById(id);
-			categoryRepository.save(category);
+		if (categoryService.existsById(id)) {
+			categoryService.deleteById(id);
+			categoryService.save(category);
 		}
 		
-		return categoryRepository.findAll();
+		return categoryService.findAll();
 	}
 }

@@ -8,5 +8,5 @@ import rocks.j5.uga.expanse.model.Category;
  *
  */
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-
+    Category findCategoryByName(String name);
 }

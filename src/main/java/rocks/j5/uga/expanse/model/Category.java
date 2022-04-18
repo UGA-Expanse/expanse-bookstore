@@ -1,5 +1,7 @@
 package rocks.j5.uga.expanse.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -7,6 +9,7 @@ import java.util.List;
  * The Class Category.
  */
 @Entity
+@Data
 public class Category {
 
 	/** The id. */
