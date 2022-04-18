@@ -13,6 +13,8 @@ package rocks.j5.uga.expanse.configuration;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import rocks.j5.uga.expanse.data.UserDemoData;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.http.HttpMethod;
@@ -29,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 //@Configuration
 //@EnableWebSecurity
 public class SecurityConfig {//extends WebSecurityConfigurerAdapter {
+
 
 
 //    @Override

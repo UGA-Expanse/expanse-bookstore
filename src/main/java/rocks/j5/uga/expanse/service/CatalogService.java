@@ -43,4 +43,10 @@ public class CatalogService {
         List<Book> books = categoryItems.stream().map(CategoryItem::getBook).collect(Collectors.toList());
         return books;
     }
+
+    public List<Book> findAllBySearch(String term) {
+        Page<Book> byTitle = bookRepository.findAllByIdAndTitle(term, term, PageRequest.ofSize(100));
+        List<Book> books = byTitle.stream().collect(Collectors.toList());
+        return books;
+    }
 }
