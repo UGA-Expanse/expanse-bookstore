@@ -37,7 +37,7 @@ public class CategoryService {
     }
 
     public Category findAllBooksByCategory(String category) {
-        Category foundCategory = categoryRepository.findCategoryByName(category);
+            Category foundCategory = categoryRepository.findCategoryByName(category);
         return foundCategory;
     }
 

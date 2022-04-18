@@ -23,7 +23,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/book", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CatalogController {
+public class                                                                                                                                                                                            CatalogController {
 
     private final CatalogService catalogService;
     private final UserService userService;
@@ -44,6 +44,16 @@ public class CatalogController {
     @GetMapping(value = "/all")
     public List<Book> getAll() {
         return catalogService.findAll();
+    }
+
+    /**
+     * Gets all books.
+     *
+     * @return all books
+     */
+    @GetMapping(value = "/category/{categoryName}/all")
+    public List<Book> getAllByCategory(@PathVariable String categoryName) {
+        return catalogService.findAllByCategory(categoryName);
     }
 
     /**

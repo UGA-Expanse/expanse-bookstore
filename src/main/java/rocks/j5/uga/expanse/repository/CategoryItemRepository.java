@@ -4,19 +4,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import rocks.j5.uga.expanse.model.Book;
-import org.springframework.data.domain.Pageable;
 import rocks.j5.uga.expanse.model.Category;
+import rocks.j5.uga.expanse.model.CategoryItem;
 
 import java.util.List;
 
-/**
- * The Interface BookRepository.
- *
- * @author niknab
- * @version 1.0
- */
-public interface BookRepository extends JpaRepository<Book, Integer> {
-    Page<Book> findAll(Pageable pageable);
-
-//    Page<Book> findAllByCategoryItem(Category category);
+public interface CategoryItemRepository extends JpaRepository<CategoryItem, Integer> {
+    List<CategoryItem> findAllByCategoryId(Integer categoryId);
 }

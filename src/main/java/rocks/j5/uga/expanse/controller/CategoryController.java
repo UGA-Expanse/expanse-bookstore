@@ -9,6 +9,7 @@ import rocks.j5.uga.expanse.service.CatalogService;
 import rocks.j5.uga.expanse.service.CategoryService;
 import rocks.j5.uga.expanse.service.UserService;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -38,8 +39,10 @@ public class CategoryController {
 	 *
 	 * @return all categories
 	 */
-	@GetMapping(value = "/{category}/all")
-	public Category getAllBooksByCategory(@PathVariable String category) {
+	@GetMapping(value = "/{category}/{all}")
+	public Category getAllBooksByCategory(@PathVariable String category,
+										  @PathVariable(required = false) String howMany,
+										  HttpSession httpSession) {
 		return categoryService.findAllBooksByCategory(category);
 	}
 
@@ -50,7 +53,8 @@ public class CategoryController {
 	 * @return the list
 	 */
 	@PostMapping(value = "/add")
-	public List<Category> persist(@RequestBody final Category category) {
+	public List<Category> persist(@RequestBody final Category category,
+								  HttpSession httpSession) {
 		categoryService.save(category);
 		return categoryService.findAll();
 	}
