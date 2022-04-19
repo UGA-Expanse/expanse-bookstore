@@ -38,7 +38,7 @@ public class CategoryService {
 
     public Category findAllBooksByCategory(String category) {
             Category foundCategory = categoryRepository.findCategoryByName(category);
-        return foundCategory;
+            return foundCategory;
     }
 
     public void deleteById(int id) {

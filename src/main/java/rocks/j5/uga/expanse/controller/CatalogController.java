@@ -63,7 +63,8 @@ public class                                                                    
      */
     @GetMapping(value = "/search")
     public List<Book> searchByTerm(@RequestParam String term) {
-        return catalogService.findAllBySearch(term);
+//        return catalogService.findAllBySearch(term);
+        return catalogService.findAllUsingContains(term);
     }
 
     /**
