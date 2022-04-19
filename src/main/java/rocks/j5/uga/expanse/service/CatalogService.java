@@ -4,7 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import rocks.j5.uga.expanse.BookAuthorRepository;
+import rocks.j5.uga.expanse.repository.BookAuthorRepository;
+import rocks.j5.uga.expanse.model.Author;
 import rocks.j5.uga.expanse.model.Book;
 import rocks.j5.uga.expanse.model.Category;
 import rocks.j5.uga.expanse.model.CategoryItem;
@@ -12,6 +13,9 @@ import rocks.j5.uga.expanse.repository.BookRepository;
 import rocks.j5.uga.expanse.repository.CategoryItemRepository;
 import rocks.j5.uga.expanse.repository.CategoryRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,5 +62,25 @@ public class CatalogService {
         List<Book> books = bookRepository.findAllWithContains(term, term, PageRequest.ofSize(100));
 
         return books;
+    }
+
+    public List<Book> findAllUsingCriteria(String term,
+                                           String criteria) {
+
+        if (criteria.equals("books")) {
+            return findAllUsingContains(term);
+        }
+        else if (criteria.equals("by_author")) {
+            return bookAuthorRepository.findByAuthor_AuthorNameContainsIgnoreCase(term);
+        } else if (criteria.equals("by_publisher")) {
+            return bookRepository.findAllByPublisherNameContains(term);
+        } else if (criteria.equals("by_year")) {
+            Integer criteriaYear = Integer.valueOf(term);
+            LocalDate startDate = LocalDate.of(criteriaYear, 1, 1);
+            LocalDate endDate = LocalDate.of(criteriaYear,12,31);
+            return bookRepository.findByPublicationDateBetween(startDate, endDate);
+        }
+
+        return Collections.EMPTY_LIST;
     }
 }

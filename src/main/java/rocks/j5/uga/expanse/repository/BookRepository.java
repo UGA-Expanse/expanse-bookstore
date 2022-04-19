@@ -7,6 +7,7 @@ import rocks.j5.uga.expanse.model.Author;
 import rocks.j5.uga.expanse.model.Book;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -28,8 +29,15 @@ public interface BookRepository<findAll> extends JpaRepository<Book, Integer> {
 
     List<Author> findByTitleContainsIgnoreCase(String title);
 
+//    List<Book> findByPublisherName();
 
+    @Query("select b from Book b where upper(b.publisher.publisherName) like upper(concat('%', ?1, '%'))")
+    List<Book> findByPublisher_PublisherNameContainsIgnoreCase(String publisherName);
 
+    List<Book> findByPublicationDateBetween(LocalDate publicationDateStart, LocalDate publicationDateEnd);
+
+    @Query("select b from Book b where upper(b.publisher.publisherName) like upper(concat('%', ?1, '%'))")
+    List<Book> findAllByPublisherNameContains(String publisherName);
 
 
 

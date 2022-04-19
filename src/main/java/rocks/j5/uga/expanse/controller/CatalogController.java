@@ -61,10 +61,24 @@ public class                                                                    
      *
      * @return all books
      */
+//    @GetMapping(value = "/search")
+//    public List<Book> searchByTerm(@RequestParam String term) {
+////        return catalogService.findAllBySearch(term);
+//        return catalogService.findAllUsingContains(term);
+//    }
+
+    /**
+     * Gets all books.
+     *
+     * @return all books
+     */
     @GetMapping(value = "/search")
-    public List<Book> searchByTerm(@RequestParam String term) {
-//        return catalogService.findAllBySearch(term);
-        return catalogService.findAllUsingContains(term);
+    public List<Book> searchByTerm(@RequestParam String term,
+                                   @RequestParam String criteria) {
+        if (criteria == null)
+            return catalogService.findAllUsingContains(term);
+        else
+            return catalogService.findAllUsingCriteria(term, criteria);
     }
 
     /**
