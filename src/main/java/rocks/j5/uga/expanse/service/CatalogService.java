@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -82,5 +83,10 @@ public class CatalogService {
         }
 
         return Collections.EMPTY_LIST;
+    }
+
+    public Book findBookByIsbn(String isbn) {
+        Optional<Book> foundBook = (Optional<Book>) bookRepository.findByIsbn13Is(isbn);
+        return foundBook.orElse(null);
     }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE book ADD UNIQUE isbn_idx (isbn13);

@@ -57,6 +57,16 @@ public class                                                                    
     }
 
     /**
+     * Get a specific book by isbn
+     *
+     * @return Book
+     */
+    @GetMapping(value = "/bd/isbn/{isbn}")
+    public Book getBookByIsbn(@PathVariable String isbn) {
+        return catalogService.findBookByIsbn(isbn);
+    }
+
+    /**
      * Gets all books.
      *
      * @return all books

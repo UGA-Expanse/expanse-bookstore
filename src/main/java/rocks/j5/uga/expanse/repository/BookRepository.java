@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The Interface BookRepository.
@@ -39,6 +40,7 @@ public interface BookRepository<findAll> extends JpaRepository<Book, Integer> {
     @Query("select b from Book b where upper(b.publisher.publisherName) like upper(concat('%', ?1, '%'))")
     List<Book> findAllByPublisherNameContains(String publisherName);
 
+    Optional<Book> findByIsbn13Is(String isbn13);
 
 
 
