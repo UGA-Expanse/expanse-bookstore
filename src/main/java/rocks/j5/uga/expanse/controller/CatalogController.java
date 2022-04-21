@@ -23,6 +23,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/book", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://j5.rocks", maxAge = 3600)
 public class                                                                                                                                                                                            CatalogController {
 
     private final CatalogService catalogService;
@@ -42,7 +43,7 @@ public class                                                                    
      * @return all books
      */
     @GetMapping(value = "/all")
-    public List<Book> getAll() {
+    public List<Book> getAll(HttpSession session) {
         return catalogService.findAll();
     }
 
@@ -52,7 +53,7 @@ public class                                                                    
      * @return all books
      */
     @GetMapping(value = "/category/{categoryName}/all")
-    public List<Book> getAllByCategory(@PathVariable String categoryName) {
+    public List<Book> getAllByCategory(@PathVariable String categoryName, HttpSession session) {
         return catalogService.findAllByCategory(categoryName);
     }
 
@@ -62,7 +63,7 @@ public class                                                                    
      * @return Book
      */
     @GetMapping(value = "/bd/isbn/{isbn}")
-    public Book getBookByIsbn(@PathVariable String isbn) {
+    public Book getBookByIsbn(@PathVariable String isbn, HttpSession session) {
         return catalogService.findBookByIsbn(isbn);
     }
 
@@ -84,7 +85,7 @@ public class                                                                    
      */
     @GetMapping(value = "/search")
     public List<Book> searchByTerm(@RequestParam String term,
-                                   @RequestParam String criteria) {
+                                   @RequestParam String criteria, HttpSession session) {
         if (criteria == null)
             return catalogService.findAllUsingContains(term);
         else
@@ -97,7 +98,7 @@ public class                                                                    
      * @return book if exists
      */
     @GetMapping(value = "/get")
-    public BookOriginal get(@RequestParam("id") int id) {
+    public BookOriginal get(@RequestParam("id") int id, HttpSession session) {
         return null;
     }
 

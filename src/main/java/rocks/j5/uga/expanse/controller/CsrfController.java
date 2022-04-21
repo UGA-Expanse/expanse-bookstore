@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/csrf")
+@CrossOrigin("*")
 public class CsrfController {
 
 //    public CsrfToken csrf(CsrfToken token) {

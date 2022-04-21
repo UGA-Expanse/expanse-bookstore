@@ -17,9 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static rocks.j5.uga.expanse.configuration.constants.Constants.USER_PROFILE_IDENT;
+import static rocks.j5.uga.expanse.configuration.constants.Constants.USER_PROFILE_PASSWORD_REPLACEMENT;
+
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/login", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SecurityController {
 
     private final UserService userService;
@@ -34,27 +37,28 @@ public class SecurityController {
      * @param user the user
      * @return the user
      */
-    @PostMapping
+    @PostMapping(value="/login")
     public @ResponseBody ResponseEntity<HttpResponseWrapper> login(@RequestBody final User user,
                                                                    HttpSession session)
     {
         try {
             User responseUser = null;
             HttpResponseWrapper response = null;
-            String userIdent = (String) session.getAttribute("ACCOUNT_USERNAME");
+            String userIdent = (String) session.getAttribute(USER_PROFILE_IDENT);
 
             if (session.isNew() || userIdent == null || userIdent != user.getUsername()) {
                 Optional<User> savedUserOptional = userService.verify(user);
+
                 if (savedUserOptional.isPresent()) {
                     responseUser = savedUserOptional.get();
                     userIdent = responseUser.getUsername();
-                    session.setAttribute("ACCOUNT_USERNAME", userIdent);
+                    session.setAttribute(USER_PROFILE_IDENT, userIdent);
+                    responseUser.setPassword(USER_PROFILE_PASSWORD_REPLACEMENT);
                     response = new HttpResponseWrapper(responseUser, null);
                 } else {
                     throw new Exception("Login unsuccessful");
                 }
             } else {
-//                String message = "User is active currently.";
                 responseUser = userService.get(userIdent);
                 response = new HttpResponseWrapper(responseUser, null);
             }
@@ -65,11 +69,27 @@ public class SecurityController {
             );
         } catch(Exception e) {
             EncounteredError eError = new EncounteredError(e.getMessage(), 0);
+
             return new ResponseEntity<HttpResponseWrapper>(
                     new HttpResponseWrapper(null, List.of(eError)),
                     HttpStatus.NOT_FOUND
             );
         }
+    }
+
+    /**
+     * Clear session variables.
+     *
+     * @param user the user
+     * @return the user
+     */
+    @PostMapping(value="/logout")
+    public @ResponseBody ResponseEntity<HttpResponseWrapper> logout(@RequestBody final User user,
+                                                                   HttpSession session)
+    {
+        session.invalidate();
+        HttpResponseWrapper response = new HttpResponseWrapper(user, null);
+        return new ResponseEntity<HttpResponseWrapper>(response, HttpStatus.OK);
     }
 
     @GetMapping

@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://j5.rocks", maxAge = 3600)
 public class UserController {
 
     private final UserService userService;
@@ -108,7 +108,7 @@ public class UserController {
      * @return all users
      */
     @DeleteMapping(value = "/delete")
-    public @ResponseBody ResponseEntity<List<User>> delete(@PathVariable String username) {
+    public @ResponseBody ResponseEntity<List<User>> delete(@PathVariable String username, HttpSession session) {
         return new ResponseEntity<List<User>>(userService.delete(username), HttpStatus.OK);
     }
 

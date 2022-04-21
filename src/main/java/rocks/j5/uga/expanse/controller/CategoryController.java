@@ -21,6 +21,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/category", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(maxAge = 3600)
 public class CategoryController {
 
 	private final CatalogService catalogService;
@@ -39,6 +40,7 @@ public class CategoryController {
 	 *
 	 * @return all categories
 	 */
+	@CrossOrigin("http://j5.rocks")
 	@GetMapping(value = "/{category}/{all}")
 	public Category getAllBooksByCategory(@PathVariable String category,
 										  @PathVariable(required = false) String howMany,
@@ -66,7 +68,7 @@ public class CategoryController {
 	 * @return all categories
 	 */
 	@DeleteMapping(value = "/delete")
-	public List<Category> delete(@PathVariable int id) {
+	public List<Category> delete(@PathVariable int id, HttpSession session) {
 		categoryService.deleteById(id);
 		return categoryService.findAll();
 	}
@@ -79,7 +81,7 @@ public class CategoryController {
 	 * @return all categories
 	 */
 	@PutMapping(value = "/put/{id}")
-	public List<Category> put(@PathVariable int id, @RequestBody Category category) {
+	public List<Category> put(@PathVariable int id, @RequestBody Category category, HttpSession session) {
 		if (categoryService.existsById(id)) {
 			categoryService.deleteById(id);
 			categoryService.save(category);

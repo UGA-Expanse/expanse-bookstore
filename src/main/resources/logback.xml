@@ -6,8 +6,8 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{35}:%L - %m %replace(%xException){'\n',';'}%nopex%n</pattern>
         </encoder>
     </appender>
-    <logger name="rocks.j5" level="error"/>
-    <root level="error">
+    <logger name="rocks.j5" level="info"/>
+    <root level="info">
         <appender-ref ref="stdout"/>
     </root>
 </configuration>

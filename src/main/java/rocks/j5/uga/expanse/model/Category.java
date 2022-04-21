@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Entity
 @Data
-public class Category {
+public class 	Category {
 
 	/** The id. */
 	@Id
