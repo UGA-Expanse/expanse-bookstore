@@ -44,7 +44,7 @@ mysql -u {username} -p
 This command will ask for your MySQL password. Once inside the MySQL monitor you can create the database with the following command.
 
 ```SQL
-CREATE DATABASE `uga-expanse-db` ;
+CREATE DATABASE `expanse_books` ;
 ```
 
 Now you can run the server which generates the database tables. To run the server, run:
