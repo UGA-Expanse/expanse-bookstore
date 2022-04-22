@@ -18,10 +18,12 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 @Service
 @Slf4j
@@ -49,7 +51,7 @@ public class CartItemService {
 
     public Cart create(Long cartId,
                        Integer bookId,
-                       HttpSession session) throws BookNotFoundException, PriceDetailNotFoundException {
+                       HttpSession session) throws Throwable {
 
         Predicate<CartItem> bookExistsInCart = c -> c.getBook().getId().equals(bookId);
         Function<Cart, Boolean> cartExistsInRepo = c -> cartRepository.getById(c.getId()) != null;
@@ -63,17 +65,15 @@ public class CartItemService {
             }
 
             cart.setCartSessionId(session.getId());
-            Set<CartItem> cartItems = cart.getCartItems();
-            if (cartItems.stream().anyMatch(bookExistsInCart)) {
-                return cartRepository.saveAndFlush(cart);
+            if (cart.getCartItems().stream().anyMatch(bookExistsInCart)) {
+                cartRepository.saveAndFlush(cart);
+                return cart;
             }
 
-            Book book = (Book) bookRepository.getById(bookId);
-            if (book == null) {
-                throw new BookNotFoundException("Book was not found in database: " + bookId);
-            }
+            Book book = (Book) bookRepository.findByBookId(bookId);
+            if (book == null) throw new BookNotFoundException("Book was not found in database: " + bookId);
 
-            BigDecimal price = (BigDecimal) priceRepository.findByBookId(bookId).get();
+            BigDecimal price = ((PriceDetail) priceRepository.findByBookId(bookId).get()).getListPrice();
             if (price == null) {
                 throw new PriceDetailNotFoundException("Price for book was not found in database" + bookId);
             }
@@ -81,10 +81,9 @@ public class CartItemService {
             CartItem cartItem = CartItem.builder().quantity(1).cartItemType("NORMAL").book(book).price(price).build();
             cartItem.setCart(cart);
 
-//            cartRepository.save(cart);
-//            cart.getCartItems().add(cartItem);
-
             cartItemRepository.saveAndFlush(cartItem);
+
+            cart.getCartItems().add(cartItem);
 
             return cart;
         }
@@ -96,7 +95,7 @@ public class CartItemService {
 
     public Cart create(Integer bookId,
                        HttpSession session)
-            throws PriceDetailNotFoundException, BookNotFoundException {
+            throws Throwable {
 
         Long cartId = (Long) session.getAttribute(Constants.CART_SESSION_IDENT);
 
@@ -119,13 +118,14 @@ public class CartItemService {
         cartItem = CartItem.builder()
                 .cartItemType("NORMAL")
                 .book(book)
+                .quantity(1)
                 .price(price)
                 .cart(cart)
                 .build();
 
         cartItemRepository.save(cartItem);
 
-        cart.getCartItems().add(cartItem);
+        cart.getCartItems().addAll(cartItemRepository.findByCart_Id(cart.getId()));
 
         // cartItem.setCart(cart);
         // cartItemRepository.save(cartItem);

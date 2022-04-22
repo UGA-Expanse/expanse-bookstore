@@ -17,4 +17,10 @@ public interface CategoryItemRepository extends JpaRepository<CategoryItem, Inte
 
 
 
+//    List<CategoryItem> findCategoryItemFromCatId(Integer category_id);
+
+
+
+
+
 }

@@ -47,8 +47,10 @@ public class CatalogService {
     public List<Book> findAllByCategory(String cas) {
 
         Category category = categoryRepository.findCategoryByName(cas);
-        List<CategoryItem> categoryItems = categoryItemRepository.findAllByCategory(category.getCategory_id());
-        List<Book> books = categoryItems.stream().map(CategoryItem::getBook).limit(100l).collect(Collectors.toList());
+
+//        List<CategoryItem> categoryItems = categoryItemRepository.findCategoryItemFromCatId(category.getCategory_id());
+
+        List<Book> books = category.getCategoryItems().stream().map(CategoryItem::getBook).limit(100l).collect(Collectors.toList());
         return books;
     }
 

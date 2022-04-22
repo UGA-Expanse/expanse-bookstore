@@ -3,6 +3,7 @@ package rocks.j5.uga.expanse.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,8 +28,8 @@ public class 	Category {
 	private String picture;
 
 	/** The products. */
-//	@OneToMany(mappedBy = "category")
-//	private List<Product> products;
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "category", fetch = FetchType.EAGER)
+	private Collection<CategoryItem> categoryItems;
 
 	/**
 	 * Empty Constructor. Instantiates a new category.

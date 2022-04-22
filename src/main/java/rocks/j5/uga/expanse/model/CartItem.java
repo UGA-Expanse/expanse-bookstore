@@ -29,10 +29,10 @@ public class CartItem implements Serializable {
 
     @JsonIgnore
     @JoinColumn(name = "cart_id", referencedColumnName = "cart_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Cart cart;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id")
     private Book book;
 
@@ -65,5 +65,10 @@ public class CartItem implements Serializable {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "rocks.j5.uga.expanse.model.CartItem[ cart_item_id=" + getCart_item_id() + " ]";
+    } //toString
 
 }

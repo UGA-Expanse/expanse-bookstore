@@ -42,6 +42,10 @@ public interface BookRepository<findAll> extends JpaRepository<Book, Integer> {
 
     Optional<Book> findByIsbn13Is(String isbn13);
 
+    @Query("select b from Book b where b.id = ?1")
+    Book findByBookId(Integer id);
+
+
 
 
 //    Page<Book> findAllByCategoryItem(Category category);

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -28,7 +29,7 @@ public class Cart implements Serializable {
     private String cartSessionId;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "cart", fetch = FetchType.LAZY)
-    private Set<CartItem> cartItems;
+    private Collection<CartItem> cartItems;
 
     public Long getId() {
         return id;
@@ -45,5 +46,10 @@ public class Cart implements Serializable {
     public void setCartSessionId(String cartSessionId) {
         this.cartSessionId = cartSessionId;
     }
+    @Override
+    public String toString() {
+        return "rocks.j5.uga.expanse.model.Cart[ cart_id=" + getId() + " ]";
+    } //toString
+
 
 }

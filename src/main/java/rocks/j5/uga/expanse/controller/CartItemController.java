@@ -13,6 +13,8 @@ import rocks.j5.uga.expanse.model.CartItem;
 import rocks.j5.uga.expanse.service.CartItemService;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -34,23 +36,27 @@ public class CartItemController {
 
     @SneakyThrows
     @PostMapping(value = "/{cartId}/add/{bookId}")
-    public @ResponseBody ResponseEntity<Cart> add(@PathVariable final Long cartId,
+    public @ResponseBody ResponseEntity<HttpResponseWrapper> add(@PathVariable final Long cartId,
                                                   @PathVariable final Integer bookId,
                                                   HttpSession session) {
 
         HttpResponseWrapper response = null;
+        Cart cart = null;
+
         if (cartId == 0) {
-            cartItemService.create(bookId, session);
+            cart = cartItemService.create(bookId, session);
+            session.setAttribute(Constants.CART_SESSION_IDENT, cart.getId());
         } else if (cartId != 0) {
             Long existingCartId = (Long) session.getAttribute(Constants.CART_SESSION_IDENT);
             if (existingCartId != cartId) {
                 session.setAttribute(Constants.CART_SESSION_IDENT, cartId);
+                cart = cartItemService.create(cartId, bookId, session);
             }
         }
 
-        Cart cart = cartItemService.create(cartId, bookId, session);
-        session.setAttribute(Constants.CART_SESSION_IDENT, cart.getId());
-        return new ResponseEntity<Cart>(HttpStatus.OK);
+        response = HttpResponseWrapper.builder().content(cart).encounteredErrors(new ArrayList<>()).build();
+
+        return new ResponseEntity<HttpResponseWrapper>(response, HttpStatus.OK);
     }
 
 
@@ -61,7 +67,7 @@ public class CartItemController {
         Long cartId = (Long) session.getAttribute(Constants.CART_SESSION_IDENT);
         Cart cart = cartItemService.getCart(cartId, session);
         session.setAttribute(Constants.CART_SESSION_IDENT, cart.getId());
-        Set<CartItem> cartItems = cart.getCartItems();
+        Collection<CartItem> cartItems = cart.getCartItems();
 
         return new ResponseEntity<Set<CartItem>>(HttpStatus.OK);
     }
