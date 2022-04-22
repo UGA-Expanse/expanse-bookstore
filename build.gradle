@@ -54,7 +54,9 @@ tasks.named('test') {
 flyway {
 	url = 'jdbc:mysql://localhost:3306/expanse_books'
 	user = 'root'
-	password = 'h0m3r+mysql'
+	password = 'root'
+	target = 0020
+//	errorOverrides = '23000:1452:W'
 }
 
 

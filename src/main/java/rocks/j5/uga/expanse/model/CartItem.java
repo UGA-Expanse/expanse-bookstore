@@ -1,5 +1,6 @@
 package rocks.j5.uga.expanse.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Table(name = "cart_item")
@@ -16,39 +16,31 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItem extends EntityWithIntID implements Serializable {
+public class CartItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-//    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer cart_item_id;
 
     @Column(name = "cart_item_type", length = 20)
     private String cartItemType;
 
-    @ManyToOne
-    @JoinColumn(name="cart_id", nullable=false)
+    @JsonIgnore
+    @JoinColumn(name = "cart_id", referencedColumnName = "cart_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Cart cart;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
 
     @Column(name = "item_count")
-    private Integer itemCount;
+    private Integer quantity;
 
     @Column(name = "price", precision = 5, scale = 2)
     private BigDecimal price;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getCartItemType() {
         return cartItemType;
@@ -58,12 +50,12 @@ public class CartItem extends EntityWithIntID implements Serializable {
         this.cartItemType = cartItemType;
     }
 
-    public Integer getItemCount() {
-        return itemCount;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setItemCount(Integer itemCount) {
-        this.itemCount = itemCount;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public BigDecimal getPrice() {

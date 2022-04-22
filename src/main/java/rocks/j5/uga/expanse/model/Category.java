@@ -15,8 +15,8 @@ public class 	Category {
 	/** The id. */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", unique = true, nullable = false)
-	private Integer id;
+	@Column(name = "category_id", unique = true, nullable = false)
+	private Integer category_id;
 
 	/** The name. */
 	@Column(name = "name", unique = true, nullable = false)
@@ -39,33 +39,15 @@ public class 	Category {
 	/**
 	 * Instantiates a new category.
 	 *
-	 * @param id       the id
+	 * @param category_id       the id
 	 * @param name     the name
 	 * @param picture  the picture
 	 * @param children the children
 	 */
-	public Category(Integer id, String name, String picture, List<Category> children) {
-		this.id = id;
+	public Category(Integer category_id, String name, String picture, List<Category> children) {
+		this.category_id = category_id;
 		this.name = name;
 		this.picture = picture;
-	}
-
-	/**
-	 * Gets the id.
-	 *
-	 * @return the id
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * Sets the id.
-	 *
-	 * @param id the new id
-	 */
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	/**

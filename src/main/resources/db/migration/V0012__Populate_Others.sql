@@ -4,10 +4,10 @@
 INSERT INTO customer_address (customer_id, address_id, status_id)
 SELECT c.customer_id,
        (SELECT address_id
-    FROM address
-    ORDER BY RAND()
-    LIMIT 1),
-    1
+        FROM address
+        ORDER BY RAND()
+        LIMIT 1),
+       1
 FROM customer c;
 
 /* Add a second active address for 750 of those customers */
@@ -24,10 +24,10 @@ FROM (
 
      ) sub
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM customer_address c
-    WHERE c.customer_id = sub.customer_id
-    AND c.address_id = sub.address_id
+        SELECT 1
+        FROM customer_address c
+        WHERE c.customer_id = sub.customer_id
+          AND c.address_id = sub.address_id
     )
 LIMIT 750;
 
@@ -45,10 +45,10 @@ FROM (
 
      ) sub
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM customer_address c
-    WHERE c.customer_id = sub.customer_id
-    AND c.address_id = sub.address_id
+        SELECT 1
+        FROM customer_address c
+        WHERE c.customer_id = sub.customer_id
+          AND c.address_id = sub.address_id
     )
 LIMIT 400;
 
@@ -66,9 +66,9 @@ FROM (
 
      ) sub
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM customer_address c
-    WHERE c.customer_id = sub.customer_id
-    AND c.address_id = sub.address_id
+        SELECT 1
+        FROM customer_address c
+        WHERE c.customer_id = sub.customer_id
+          AND c.address_id = sub.address_id
     )
 LIMIT 200;

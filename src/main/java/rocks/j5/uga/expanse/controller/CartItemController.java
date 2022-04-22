@@ -1,5 +1,6 @@
 package rocks.j5.uga.expanse.controller;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,8 +32,9 @@ public class CartItemController {
     } // CartItemController
 
 
+    @SneakyThrows
     @PostMapping(value = "/{cartId}/add/{bookId}")
-    public @ResponseBody ResponseEntity<Cart> add(@PathVariable final Integer cartId,
+    public @ResponseBody ResponseEntity<Cart> add(@PathVariable final Long cartId,
                                                   @PathVariable final Integer bookId,
                                                   HttpSession session) {
 
@@ -40,7 +42,7 @@ public class CartItemController {
         if (cartId == 0) {
             cartItemService.create(bookId, session);
         } else if (cartId != 0) {
-            Integer existingCartId = (Integer) session.getAttribute(Constants.CART_SESSION_IDENT);
+            Long existingCartId = (Long) session.getAttribute(Constants.CART_SESSION_IDENT);
             if (existingCartId != cartId) {
                 session.setAttribute(Constants.CART_SESSION_IDENT, cartId);
             }
@@ -56,10 +58,10 @@ public class CartItemController {
     public @ResponseBody ResponseEntity<Set<CartItem>> getAll(HttpSession session) {
 
         HttpResponseWrapper response = null;
-        Integer cartId = (Integer) session.getAttribute(Constants.CART_SESSION_IDENT);
+        Long cartId = (Long) session.getAttribute(Constants.CART_SESSION_IDENT);
         Cart cart = cartItemService.getCart(cartId, session);
         session.setAttribute(Constants.CART_SESSION_IDENT, cart.getId());
-        Set<CartItem> cartItems = cart.getItems();
+        Set<CartItem> cartItems = cart.getCartItems();
 
         return new ResponseEntity<Set<CartItem>>(HttpStatus.OK);
     }

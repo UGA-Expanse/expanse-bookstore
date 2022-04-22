@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -14,23 +15,26 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cart {
+public class Cart implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "cart_id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "cart_session_id", length = 200)
     private String cartSessionId;
 
-    @OneToMany(mappedBy="cart")
-    private Set<CartItem> items;
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "cart", fetch = FetchType.LAZY)
+    private Set<CartItem> cartItems;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

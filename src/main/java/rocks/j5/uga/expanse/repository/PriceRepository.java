@@ -14,4 +14,6 @@ public interface PriceRepository<findAll> extends JpaRepository<PriceDetail, Int
 
     @Query("select p from PriceDetail p where p.book.id = ?1")
     Optional<BigDecimal> findByBookId(Integer id);
+
+
 }

@@ -1,5 +1,5 @@
 /* Select batch of records, random book and random price between 0 and 20. */
-/*
+
 SELECT
     o.order_id,
    (SELECT book_id
@@ -14,7 +14,7 @@ SELECT
     FLOOR(RAND() * 11127) AS book_id,
     ROUND(RAND() * 20, 2) AS price
 FROM cust_order o;
-*/
+
 
 
 /* Add a line for all orders */
