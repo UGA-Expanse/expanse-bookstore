@@ -68,6 +68,7 @@ Now you can run the frontend client to use the web application. To run the clien
 
 ```bash
 cd expanse-frontend
+yarn build
 yarn start
 ```
 
