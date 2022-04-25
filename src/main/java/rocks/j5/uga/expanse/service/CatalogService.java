@@ -63,6 +63,7 @@ public class CatalogService {
 
     public List<Book> findAllUsingContains(String term) {
         List<Book> books = bookRepository.findAllWithContains(term, term, PageRequest.ofSize(100));
+//        books.addAll(bookAuthorRepository.findByAuthor_AuthorNameContainsIgnoreCase(term));
 
         return books;
     }

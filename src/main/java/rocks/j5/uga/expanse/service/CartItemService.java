@@ -133,7 +133,45 @@ public class CartItemService {
         return cart;
     }
 
-    public Cart getCart(Long cartId, HttpSession session) {
+    public Cart getActiveCart()
+    {
+        return cartRepository.findFirstByIdGreaterThanOrderByIdDesc(0L);
+    }
+
+    public Cart getCart(Long cartId,
+                        HttpSession session)
+    {
         return cartRepository.getById(cartId);
+    }
+
+    public Cart delete(Long cartId,
+                       Integer cartItemId) {
+        // todo test that cart belongs to user.
+        Cart c = cartRepository.getCartById(cartId);
+        CartItem cartItem = c.getCartItems().stream().filter(cart -> cart.getCart_item_id().equals(cartItemId)).findFirst().orElse(null);
+        if (c != null) {
+            cartItemRepository.deleteById(cartItemId);
+        }
+
+        return null;
+    }
+
+    public Cart update(Long cartId,
+                       Integer cartItemId,
+                       int qty)
+    {
+        // todo test that cart belongs to user.
+        Cart c = cartRepository.getCartById(cartId);
+        if (c != null) {
+            CartItem cartItem = c.getCartItems().stream().filter(cart -> cart.getCart_item_id().equals(cartItemId)).findFirst().orElse(null);
+            if (cartItem != null) {
+                cartItem.setQuantity(qty);
+                cartRepository.saveAndFlush(c);
+
+                return c;
+            }
+        }
+
+        return null;
     }
 }

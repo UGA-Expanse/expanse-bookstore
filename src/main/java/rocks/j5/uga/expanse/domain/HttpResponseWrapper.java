@@ -7,6 +7,7 @@ import lombok.*;
 import rocks.j5.uga.expanse.model.User;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @Data
 @Builder
@@ -14,9 +15,10 @@ import java.util.Collection;
 @NoArgsConstructor
 @ToString
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class HttpResponseWrapper {
-    Object content;
-    Collection<EncounteredError> encounteredErrors;
+public class HttpResponseWrapper<T> {
+    T content;
+    @Builder.Default
+    Collection<EncounteredError> encounteredErrors = Collections.emptyList();
 }
 
 

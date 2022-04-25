@@ -1,5 +1,6 @@
 package rocks.j5.uga.expanse.controller;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -70,6 +71,42 @@ public class CartItemController {
         Collection<CartItem> cartItems = cart.getCartItems();
 
         return new ResponseEntity<Set<CartItem>>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{cartId}")
+    public @ResponseBody ResponseEntity<HttpResponseWrapper<Cart>> getAll(@PathVariable Long cartId,
+                                                                          HttpSession session)
+    {
+        Cart cart = null;
+
+        if (cartId == 0) {
+            cart = cartItemService.getActiveCart();
+        } else {
+            cart = cartItemService.getCart(cartId, session);
+        }
+
+        session.setAttribute(Constants.CART_SESSION_IDENT, cart.getId());
+        return new ResponseEntity<>(HttpResponseWrapper.<Cart>builder().content(cart).build(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{cartId}/cartitem/{cartItemId}")
+    public @ResponseBody ResponseEntity<HttpResponseWrapper<Cart>> update(@NonNull @PathVariable Long cartId,
+                                                                          @NonNull @PathVariable Integer cartItemId,
+                                                                          @NonNull @RequestParam Integer qty,
+                                                                          HttpSession session)
+    {
+        Cart cart = null;
+        HttpResponseWrapper response = null;
+
+       if (qty == 0) {
+           cart = cartItemService.delete(cartId, cartItemId);
+           cart = cartItemService.getCart(cartId, session);
+       } else {
+           cart = cartItemService.update(cartId, cartItemId, qty);
+       }
+
+        session.setAttribute(Constants.CART_SESSION_IDENT, cart.getId());
+        return new ResponseEntity<>(HttpResponseWrapper.<Cart>builder().content(cart).build(), HttpStatus.OK);
     }
 
 }

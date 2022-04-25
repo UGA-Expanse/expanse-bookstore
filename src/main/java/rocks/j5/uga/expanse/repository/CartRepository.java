@@ -5,4 +5,8 @@ import rocks.j5.uga.expanse.model.Cart;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
     Cart getCartById(Long id);
+
+    Cart findFirstByIdGreaterThanOrderByIdDesc(Long id);
+
+
 }

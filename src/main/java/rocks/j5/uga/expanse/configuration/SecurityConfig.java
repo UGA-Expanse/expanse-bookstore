@@ -14,6 +14,12 @@ package rocks.j5.uga.expanse.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 import rocks.j5.uga.expanse.data.UserDemoData;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
@@ -28,23 +34,30 @@ import rocks.j5.uga.expanse.data.UserDemoData;
 //import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 //import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
-//@Configuration
+@Configuration
 //@EnableWebSecurity
-public class SecurityConfig {//extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+//    @Bean
+//    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+//        http
+//                // ...
+//                .csrf(csrf -> csrf.disable());
+//        return http.build();
+//    }
 
 
-
-//    @Override
-//    protected void configure(final HttpSecurity http) throws Exception {
-//        http.csrf().disable();
-//        http.httpBasic().disable();
+    @Override
+    protected void configure(final HttpSecurity http) throws Exception {
+        http.csrf().disable();
+//        http.httpBasic().disable()
 //            .csrf()
 //            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //            .and()
 //                .authorizeRequests()
-//                .antMatchers("/api/**").authenticated()
+////                .antMatchers("/ap/**").authenticated()
 //                .antMatchers("/**").permitAll();
-//    }
+    }
 //
 //    @Bean
 //    public PasswordEncoder passwordEncoder() {
