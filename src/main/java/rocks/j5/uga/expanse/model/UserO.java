@@ -1,8 +1,6 @@
 package rocks.j5.uga.expanse.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,13 +16,13 @@ import javax.persistence.Table;
 
 @Data
 @Entity
-    @Table(name = "user")
-public class User {
+@Table(name = "usero")
+public class UserO {
 
     /** The id. */
     @Id
     @Column(unique = true, nullable = false)
-    private String username;
+    private String usernameO;
 
     /** The email. */
     @Column(unique = true, nullable = false)
@@ -41,7 +39,7 @@ public class User {
     /**
      * Empty Constructor. Instantiates a new user.
      */
-    public User() {
+    public UserO() {
     }
 
     /**
@@ -52,9 +50,9 @@ public class User {
      * @param password the password
      * @param isAdmin  the is admin
      */
-    public User(String username, String email, String password, boolean isAdmin)
+    public UserO(String username, String email, String password, boolean isAdmin)
     {
-        this.username = username;
+        this.usernameO = username;
         this.email = email;
         this.password = password;
         this.isAdmin = isAdmin;
@@ -65,8 +63,8 @@ public class User {
      *
      * @return the username
      */
-    public String getUsername() {
-        return username;
+    public String getUsernameO() {
+        return usernameO;
     }
 
     /**
@@ -74,8 +72,8 @@ public class User {
      *
      * @param username the new username
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsernameO(String username) {
+        this.usernameO = username;
     }
 
     /**

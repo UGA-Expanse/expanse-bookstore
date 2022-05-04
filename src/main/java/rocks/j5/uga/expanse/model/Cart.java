@@ -1,14 +1,13 @@
 package rocks.j5.uga.expanse.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 import org.hibernate.annotations.JoinFormula;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -31,8 +30,21 @@ public class Cart implements Serializable {
     @Column(name = "cart_session_id", length = 200)
     private String cartSessionId;
 
+    @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart", fetch = FetchType.EAGER)
-    private Collection<CartItem> cartItems;
+    private Collection<CartItem> cartItems = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Customer customer;
+
+    @Column(name = "active")
+    private boolean active;
+
+    @Column(name = "cart_life", columnDefinition = "ENUM('EPHEMERAL', 'PERSISTENT')")
+    @Enumerated(EnumType.STRING)
+    private CartLife cartLife;
 
 //    @OneToOne(fetch = FetchType.EAGER)
 //    @JoinFormula("(" +
@@ -63,6 +75,8 @@ public class Cart implements Serializable {
         return "rocks.j5.uga.expanse.model.Cart[ cart_id=" + getId() + " ]";
     } //toString
 
+
+
 //    @OneToMany
 //    @JoinColumn(name = "author_id", referencedColumnName = "id")
 //    @Where(clause = "date_published = (SELECT MAX(book.date_published) " +
@@ -82,3 +96,5 @@ public class Cart implements Serializable {
 //            ")")
 //    private Book latestBook;
 }
+
+

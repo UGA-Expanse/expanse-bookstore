@@ -1,6 +1,9 @@
 package rocks.j5.uga.expanse.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,6 +13,9 @@ import java.util.Set;
 @Entity
 @Table(name = "book")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
     @Id
     @Column(name = "book_id", nullable = false)

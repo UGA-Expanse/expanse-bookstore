@@ -6,14 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import rocks.j5.uga.expanse.model.User;
-import rocks.j5.uga.expanse.service.UserService;
+import rocks.j5.uga.expanse.model.UserO;
+import rocks.j5.uga.expanse.service.UserServiceO;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @RestController
@@ -21,34 +20,34 @@ import java.util.concurrent.atomic.AtomicReference;
 @CrossOrigin(origins = "http://j5.rocks", maxAge = 3600)
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceO userServiceO;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserServiceO userServiceO) {
+        this.userServiceO = userServiceO;
     }
 
     /**
      * Login user.
      *
-     * @param user the user
+     * @param userO the user
      * @return the user
      */
     @PostMapping(value = "/check")
-    public @ResponseBody ResponseEntity<User> login(@RequestBody final User user,
+    public @ResponseBody ResponseEntity<UserO> login(@RequestBody final UserO userO,
                                                      HttpSession session)
     {
-        User responseUser;
-        User userSessionInfo = (User) session.getAttribute("USER_INFO");
+        UserO responseUserO;
+        UserO userOSessionInfo = (UserO) session.getAttribute("USER_INFO");
 
-        if (userSessionInfo == null) {
-            Optional<User> savedUserOptional = userService.verify(user);
+        if (userOSessionInfo == null) {
+            Optional<UserO> savedUserOptional = userServiceO.verify(userO);
             savedUserOptional.ifPresent(retUser -> session.setAttribute("USER_INFO", retUser));
-            responseUser = savedUserOptional.orElse(null);
+            responseUserO = savedUserOptional.orElse(null);
         } else {
-            responseUser = userSessionInfo;
+            responseUserO = userOSessionInfo;
         }
 
-        return new ResponseEntity<User>(responseUser, HttpStatus.OK);
+        return new ResponseEntity<UserO>(responseUserO, HttpStatus.OK);
     }
 
     @GetMapping("/*")
@@ -69,10 +68,10 @@ public class UserController {
      * @return all users
      */
     @GetMapping(value = "/all")
-    public @ResponseBody ResponseEntity<List<User>> getAll(HttpSession session)
+    public @ResponseBody ResponseEntity<List<UserO>> getAll(HttpSession session)
     {
-        List<User> response = userService.findAll();
-        return new ResponseEntity<List<User>>(response, HttpStatus.OK);
+        List<UserO> response = userServiceO.findAll();
+        return new ResponseEntity<List<UserO>>(response, HttpStatus.OK);
     }
 
     /**
@@ -82,23 +81,23 @@ public class UserController {
      * @return user if exists
      */
     @GetMapping(value = "/{username}")
-    public @ResponseBody ResponseEntity<User> get(@PathVariable("username") String username,
-                                                  HttpSession session)
+    public @ResponseBody ResponseEntity<UserO> get(@PathVariable("username") String username,
+                                                   HttpSession session)
     {
-        return new ResponseEntity<User>(userService.get(username), HttpStatus.OK);
+        return new ResponseEntity<UserO>(userServiceO.get(username), HttpStatus.OK);
     }
 
     /**
      * Persist user.
      *
-     * @param user the user
+     * @param userO the user
      * @return the user
      */
     @PostMapping(value = "/add")
-    public  @ResponseBody ResponseEntity<User> persist(@RequestBody final User user,
-                                                       HttpSession session)
+    public  @ResponseBody ResponseEntity<UserO> persist(@RequestBody final UserO userO,
+                                                        HttpSession session)
     {
-        return new ResponseEntity<User>(userService.persist(user), HttpStatus.OK);
+        return new ResponseEntity<UserO>(userServiceO.persist(userO), HttpStatus.OK);
     }
 
     /**
@@ -108,21 +107,21 @@ public class UserController {
      * @return all users
      */
     @DeleteMapping(value = "/delete")
-    public @ResponseBody ResponseEntity<List<User>> delete(@PathVariable String username, HttpSession session) {
-        return new ResponseEntity<List<User>>(userService.delete(username), HttpStatus.OK);
+    public @ResponseBody ResponseEntity<List<UserO>> delete(@PathVariable String username, HttpSession session) {
+        return new ResponseEntity<List<UserO>>(userServiceO.delete(username), HttpStatus.OK);
     }
 
     /**
      * Put user.
      *
      * @param username 	the username
-     * @param user  the user
+     * @param userO  the user
      * @return all users
      */
     @PutMapping(value = "/{username}/put")
-    public @ResponseBody ResponseEntity<List<User>> put(@PathVariable String username,
-                                                        @RequestBody User user,
-                                                        HttpSession httpSession) {
-        return new ResponseEntity<List<User>>(userService.update(username, user), HttpStatus.OK);
+    public @ResponseBody ResponseEntity<List<UserO>> put(@PathVariable String username,
+                                                         @RequestBody UserO userO,
+                                                         HttpSession httpSession) {
+        return new ResponseEntity<List<UserO>>(userServiceO.update(username, userO), HttpStatus.OK);
     }
 }

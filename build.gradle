@@ -7,7 +7,7 @@ buildscript {
 
 
 plugins {
-	id 'org.springframework.boot' version '2.6.6'
+	id 'org.springframework.boot' version '2.6.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
@@ -35,6 +35,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// https://mvnrepository.com/artifact/com.auth0/java-jwt
+	implementation group: 'com.auth0', name: 'java-jwt', version: '3.19.1'
 // Flyway auto
 // configuration
 	implementation 'org.flywaydb:flyway-core'
@@ -56,7 +58,7 @@ flyway {
 	url = 'jdbc:mysql://localhost:3306/expanse_books'
 	user = 'root'
 	password = 'h0m3r+mysql'
-	target = 0020
+//	target = 0027
 //	errorOverrides = '23000:1452:W'
 }
 

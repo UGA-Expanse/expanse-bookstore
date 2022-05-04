@@ -3,11 +3,10 @@ package rocks.j5.uga.expanse.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import rocks.j5.uga.expanse.model.Book;
 import rocks.j5.uga.expanse.model.Category;
 import rocks.j5.uga.expanse.service.CatalogService;
 import rocks.j5.uga.expanse.service.CategoryService;
-import rocks.j5.uga.expanse.service.UserService;
+import rocks.j5.uga.expanse.service.UserServiceO;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -26,13 +25,13 @@ public class CategoryController {
 
 	private final CatalogService catalogService;
 	private final CategoryService categoryService;
-	private final UserService userService;
+	private final UserServiceO userServiceO;
 
 	public CategoryController(CatalogService catalogService, CategoryService categoryService,
-							  UserService userService) {
+							  UserServiceO userServiceO) {
 		this.catalogService = catalogService;
 		this.categoryService = categoryService;
-		this.userService = userService;
+		this.userServiceO = userServiceO;
 	}
 
 	/**
@@ -40,7 +39,7 @@ public class CategoryController {
 	 *
 	 * @return all categories
 	 */
-	@CrossOrigin("http://j5.rocks")
+	@CrossOrigin("*")
 	@GetMapping(value = "/{category}/{all}")
 	public Category getAllBooksByCategory(@PathVariable String category,
 										  @PathVariable(required = false) String howMany,

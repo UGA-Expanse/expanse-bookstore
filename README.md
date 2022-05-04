@@ -29,7 +29,7 @@ This will get a copy of the project installed locally. To configure all of its d
 
 ### Configure Database
 
-Once MySQL is installed you must configure a username and password. By default the user and password should be `root` . If not, you must configure in the file `application.configure` located in the path `src/main/resources/`.
+Once MySQL is installed you must configure a username and password. By default the userO and password should be `root` . If not, you must configure in the file `application.configure` located in the path `src/main/resources/`.
 
 In the file `application.configure` you must edit the parameters `spring.datasource.username` and `spring.datasource.password` with the values you defined.
 
@@ -53,13 +53,13 @@ Now you can run the server which generates the database tables. To run the serve
 ./gradlew spring-boot:run
 ```
 
-### Create admin user
+### Create admin userO
 
-Before continuing you must create the user `admin`, in order to perform administrator operations in the application. For this you must create a user on the MySQL monitor with the following command.
+Before continuing you must create the userO `admin`, in order to perform administrator operations in the application. For this you must create a userO on the MySQL monitor with the following command.
 
 ```SQL
 USE uga-expanse-db;
-INSERT INTO user (username, email, is_admin, password) values ('{admin.username}', '{admin.email}', true, '{admin.password}');
+INSERT INTO userO (username, email, is_admin, password) values ('{admin.username}', '{admin.email}', true, '{admin.password}');
 ```
 
 ### Run Frontend Client

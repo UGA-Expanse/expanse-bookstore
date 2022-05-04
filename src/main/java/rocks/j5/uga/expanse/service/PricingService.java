@@ -20,4 +20,9 @@ public class PricingService {
     public PriceDetail getBookPrice(Integer bookId) {
         return (PriceDetail) priceRepository.findFirstByBook_Id(bookId).get();
     }
+
+    public PriceDetail createBookPrice(PriceDetail price)
+    {
+        return (PriceDetail) priceRepository.save(price);
+    }
 }

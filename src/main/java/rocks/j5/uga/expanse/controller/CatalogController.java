@@ -11,9 +11,9 @@ import rocks.j5.uga.expanse.domain.EncounteredError;
 import rocks.j5.uga.expanse.domain.HttpResponseWrapper;
 import rocks.j5.uga.expanse.model.Book;
 import rocks.j5.uga.expanse.model.BookOriginal;
-import rocks.j5.uga.expanse.model.User;
+import rocks.j5.uga.expanse.model.UserO;
 import rocks.j5.uga.expanse.service.CatalogService;
-import rocks.j5.uga.expanse.service.UserService;
+import rocks.j5.uga.expanse.service.UserServiceO;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -23,17 +23,17 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/book", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://j5.rocks", maxAge = 3600)
-public class                                                                                                                                                                                            CatalogController {
-
+@CrossOrigin(origins = "*", maxAge = 3600)
+public class CatalogController
+{
     private final CatalogService catalogService;
-    private final UserService userService;
+    private final UserServiceO userServiceO;
 
     public CatalogController(CatalogService catalogService,
-                             UserService userService) {
+                             UserServiceO userServiceO) {
 
         this.catalogService = catalogService;
-        this.userService = userService;
+        this.userServiceO = userServiceO;
     }
 
 
@@ -43,7 +43,16 @@ public class                                                                    
      * @return all books
      */
     @GetMapping(value = "/all")
-    public List<Book> getAll(HttpSession session) {
+    public List<Book> getAll(Model model,
+                             HttpSession session) {
+        List<String> messages = (List<String>) session.getAttribute("MY_SESSION_MESSAGES");
+        if (messages == null) {
+            messages = new ArrayList<>();
+            messages.add("HELLO_WORLD");
+        } else {
+            messages.add("HELLO PLANET");
+        }
+        model.addAttribute("sessionMessages", messages);
         return catalogService.findAll();
     }
 
@@ -53,7 +62,15 @@ public class                                                                    
      * @return all books
      */
     @GetMapping(value = "/category/{categoryName}/all")
-    public List<Book> getAllByCategory(@PathVariable String categoryName, HttpSession session) {
+    public List<Book> getAllByCategory(@PathVariable String categoryName,
+                                       Model model,
+                                       HttpSession session) {
+        List<String> messages = (List<String>) session.getAttribute("MY_SESSION_MESSAGES");
+        if (messages == null) {
+            messages = new ArrayList<>();
+        }
+        model.addAttribute("sessionMessages", messages);
+
         return catalogService.findAllByCategory(categoryName);
     }
 
@@ -109,32 +126,32 @@ public class                                                                    
     /**
      * Login user.
      *
-     * @param user the user
+     * @param userO the user
      * @return the user
      */
     @PostMapping
-    public @ResponseBody ResponseEntity<HttpResponseWrapper> login(@RequestBody final User user,
+    public @ResponseBody ResponseEntity<HttpResponseWrapper> login(@RequestBody final UserO userO,
                                                                    HttpSession session)
     {
         try {
-            User responseUser = null;
+            UserO responseUserO = null;
             HttpResponseWrapper response = null;
             String userIdent = (String) session.getAttribute("ACCOUNT_USERNAME");
 
-            if (session.isNew() || userIdent == null || userIdent != user.getUsername()) {
-                Optional<User> savedUserOptional = userService.verify(user);
+            if (session.isNew() || userIdent == null || userIdent != userO.getUsernameO()) {
+                Optional<UserO> savedUserOptional = userServiceO.verify(userO);
                 if (savedUserOptional.isPresent()) {
-                    responseUser = savedUserOptional.get();
-                    userIdent = responseUser.getUsername();
+                    responseUserO = savedUserOptional.get();
+                    userIdent = responseUserO.getUsernameO();
                     session.setAttribute("ACCOUNT_USERNAME", userIdent);
-                    response = new HttpResponseWrapper(responseUser, null);
+                    response = new HttpResponseWrapper(responseUserO, null);
                 } else {
                     throw new Exception("Login unsuccessful");
                 }
             } else {
 //                String message = "User is active currently.";
-                responseUser = userService.get(userIdent);
-                response = new HttpResponseWrapper(responseUser, null);
+                responseUserO = userServiceO.get(userIdent);
+                response = new HttpResponseWrapper(responseUserO, null);
             }
 
             return new ResponseEntity<HttpResponseWrapper>(

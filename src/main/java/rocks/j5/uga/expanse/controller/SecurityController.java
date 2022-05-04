@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import rocks.j5.uga.expanse.domain.EncounteredError;
+import rocks.j5.uga.expanse.domain.ExpanseRequest;
 import rocks.j5.uga.expanse.domain.HttpResponseWrapper;
-import rocks.j5.uga.expanse.model.User;
-import rocks.j5.uga.expanse.service.UserService;
+import rocks.j5.uga.expanse.model.UserO;
+import rocks.j5.uga.expanse.service.CartItemService;
+import rocks.j5.uga.expanse.service.UserServiceO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,10 +28,12 @@ import static rocks.j5.uga.expanse.configuration.constants.Constants.USER_PROFIL
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SecurityController {
 
-    private final UserService userService;
+    private final UserServiceO userServiceO;
+    private final CartItemService cartItemService;
 
-    public SecurityController(UserService userService) {
-        this.userService = userService;
+    public SecurityController(UserServiceO userServiceO, CartItemService cartItemService) {
+        this.userServiceO = userServiceO;
+        this.cartItemService = cartItemService;
     }
 
     @GetMapping("/")
@@ -68,33 +72,33 @@ public class SecurityController {
     /**
      * Login user.
      *
-     * @param user the user
+     * @param userO the user
      * @return the user
      */
     @PostMapping(value="/login")
-    public @ResponseBody ResponseEntity<HttpResponseWrapper> login(@RequestBody final User user,
+    public @ResponseBody ResponseEntity<HttpResponseWrapper> login(@RequestBody final UserO userO,
                                                                    HttpSession session)
     {
         try {
-            User responseUser = null;
+            UserO responseUserO = null;
             HttpResponseWrapper response = null;
             String userIdent = (String) session.getAttribute(USER_PROFILE_IDENT);
 
-            if (session.isNew() || userIdent == null || userIdent != user.getUsername()) {
-                Optional<User> savedUserOptional = userService.verify(user);
+            if (session.isNew() || userIdent == null || userIdent != userO.getUsernameO()) {
+                Optional<UserO> savedUserOptional = userServiceO.verify(userO);
 
                 if (savedUserOptional.isPresent()) {
-                    responseUser = savedUserOptional.get();
-                    userIdent = responseUser.getUsername();
+                    responseUserO = savedUserOptional.get();
+                    userIdent = responseUserO.getUsernameO();
                     session.setAttribute(USER_PROFILE_IDENT, userIdent);
-                    responseUser.setPassword(USER_PROFILE_PASSWORD_REPLACEMENT);
-                    response = new HttpResponseWrapper(responseUser, null);
+                    responseUserO.setPassword(USER_PROFILE_PASSWORD_REPLACEMENT);
+                    response = new HttpResponseWrapper(responseUserO, null);
                 } else {
                     throw new Exception("Login unsuccessful");
                 }
             } else {
-                responseUser = userService.get(userIdent);
-                response = new HttpResponseWrapper(responseUser, null);
+                responseUserO = userServiceO.get(userIdent);
+                response = new HttpResponseWrapper(responseUserO, null);
             }
 
             return new ResponseEntity<HttpResponseWrapper>(
@@ -118,11 +122,18 @@ public class SecurityController {
      * @return the user
      */
     @PostMapping(value="/logout")
-    public @ResponseBody ResponseEntity<HttpResponseWrapper> logout(@RequestBody final User user,
+    public @ResponseBody ResponseEntity<HttpResponseWrapper> logout(@RequestBody final ExpanseRequest request,
                                                                    HttpSession session)
     {
         session.invalidate();
-        HttpResponseWrapper response = new HttpResponseWrapper(user, null);
+        if (request.getUser() != null && request.getUser().getUsername() != null) {
+            if ("anonymousUser".equals(request.getUser().getUsername())) {
+                cartItemService.invalidateCart(request.getCart());
+            }
+        } else if (request.getCart() != null) {
+            cartItemService.invalidateCart(request.getCart());
+        }
+        HttpResponseWrapper response = new HttpResponseWrapper(request.getUser(), null);
         return new ResponseEntity<HttpResponseWrapper>(response, HttpStatus.OK);
     }
 

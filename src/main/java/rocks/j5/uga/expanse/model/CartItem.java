@@ -32,7 +32,7 @@ public class CartItem implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Cart cart;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id")
     private Book book;
 

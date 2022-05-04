@@ -1,15 +1,20 @@
 package rocks.j5.uga.expanse.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "customer")
 public class Customer {
     @Id
-    @Column(name = "customer_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "cart_id", nullable = false)
     private Integer id;
 
     @Column(name = "first_name", length = 200)
@@ -20,6 +25,9 @@ public class Customer {
 
     @Column(name = "email", length = 350)
     private String email;
+
+    @Column(name = "userid")
+    private String userid;
 
     public Integer getId() {
         return id;
@@ -53,4 +61,11 @@ public class Customer {
         this.email = email;
     }
 
+    public String getUserid() {
+        return this.userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 }
