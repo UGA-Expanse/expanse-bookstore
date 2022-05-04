@@ -21,7 +21,7 @@ This app is a simple eCommerce Application with Spring Boot API and CRUD (create
 To install this application, run the following commands:
 
 ```bash
-git clone https://github.com/devRobots/spring-boot-ecommerce.git spring-boot-ecommerce
+git clone https://github.com/UGA-Expanse/expanse-bookstore.git
 cd uga-expanse-bookstore
 ```
 
@@ -50,17 +50,9 @@ CREATE DATABASE `expanse_books` ;
 Now you can run the server which generates the database tables. To run the server, run:
 
 ```bash
-./gradlew spring-boot:run
+./gradlew bootRun
 ```
 
-### Create admin user
-
-Before continuing you must create the user `admin`, in order to perform administrator operations in the application. For this you must create a user on the MySQL monitor with the following command.
-
-```SQL
-USE uga-expanse-db;
-INSERT INTO user (username, email, is_admin, password) values ('{admin.username}', '{admin.email}', true, '{admin.password}');
-```
 
 ### Run Frontend Client
 
@@ -71,6 +63,17 @@ cd expanse-frontend
 yarn build
 yarn start
 ```
+
+### Create admin user
+
+Before continuing you must create the user `admin`, in order to perform administrator operations in the application. For this you must create a user on the MySQL monitor with the following command.
+
+```SQL
+USE uga-expanse;
+INSERT INTO user (username, email, is_admin, password) values ('{admin.username}', '{admin.email}', true, '{admin.password}');
+```
+
+
 
 ## Links
 
